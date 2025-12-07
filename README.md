@@ -11,10 +11,10 @@
 
 This project serves as an example of low-level network programming in Go, demonstrating concepts like:
 
--   Raw packet crafting and injection with `gopacket`.
--   Packet capture with `pcap`.
--   Custom binary network protocols.
--   The security implications of operating below the standard OS firewall.
+- Raw packet crafting and injection with `gopacket`.
+- Packet capture with `pcap`.
+- Custom binary network protocols.
+- The security implications of operating below the standard OS firewall.
 
 ## Use Cases and Motivation
 
@@ -41,11 +41,11 @@ KCP is optimized for real-time applications, gaming, or unpredictable network co
 
 ### Prerequisites
 
--   `libpcap` development libraries must be installed on both the client and server machines.
-    -   **Debian/Ubuntu:** `sudo apt-get install libpcap-dev`
-    -   **RHEL/CentOS/Fedora:** `sudo yum install libpcap-devel`
-    -   **macOS:** Comes pre-installed with Xcode Command Line Tools. Install with `xcode-select --install`
-    -   **Windows:** Install Npcap. Download from [npcap.com](https://npcap.com/).
+- `libpcap` development libraries must be installed on both the client and server machines.
+  - **Debian/Ubuntu:** `sudo apt-get install libpcap-dev`
+  - **RHEL/CentOS/Fedora:** `sudo yum install libpcap-devel`
+  - **macOS:** Comes pre-installed with Xcode Command Line Tools. Install with `xcode-select --install`
+  - **Windows:** Install Npcap. Download from [npcap.com](https://npcap.com/).
 
 ### 1. Download a Release
 
@@ -57,16 +57,16 @@ You will also need the configuration files from the `example/` directory.
 
 paqet uses a unified configuration approach with role-based settings. Copy and modify either:
 
--   `example/client.yaml.example` - Client configuration example
--   `example/server.yaml.example` - Server configuration example
+- `example/client.yaml.example` - Client configuration example
+- `example/server.yaml.example` - Server configuration example
 
 You must correctly set the interfaces, IP addresses, MAC addresses, and ports.
 
 > **⚠️ Important:**
 >
-> -   **Role Configuration**: Role must be explicitly set as `role: "client"` or `role: "server"`
-> -   **Transport Security**: KCP requires identical keys on client/server.
-> -   **Configuration**: See "Critical Configuration Points" section below for detailed security requirements
+> - **Role Configuration**: Role must be explicitly set as `role: "client"` or `role: "server"`
+> - **Transport Security**: KCP requires identical keys on client/server.
+> - **Configuration**: See "Critical Configuration Points" section below for detailed security requirements
 
 #### Finding Your Network Details
 
@@ -76,23 +76,23 @@ You'll need to find your network interface name, local IP, and the MAC address o
 
 1.  **Find Interface and Local IP:** Run `ip a`. Look for your primary network card (e.g., `eth0`, `ens3`). Its IP address is listed under `inet`.
 2.  **Find Gateway MAC:**
-    -   First, find your gateway's IP: `ip r | grep default`
-    -   Then, find its MAC address with `arp -n <gateway_ip>` (e.g., `arp -n 192.168.1.1`).
+    - First, find your gateway's IP: `ip r | grep default`
+    - Then, find its MAC address with `arp -n <gateway_ip>` (e.g., `arp -n 192.168.1.1`).
 
 **On macOS:**
 
 1.  **Find Interface and Local IP:** Run `ifconfig`. Look for your primary interface (e.g., `en0`). Its IP is listed under `inet`.
 2.  **Find Gateway MAC:**
-    -   First, find your gateway's IP: `netstat -rn | grep default`
-    -   Then, find its MAC address with `arp <gateway_ip>` (e.g., `arp 192.168.1.1`).
+    - First, find your gateway's IP: `netstat -rn | grep default`
+    - Then, find its MAC address with `arp <gateway_ip>` (e.g., `arp 192.168.1.1`).
 
 **On Windows:**
 
 1.  **Find Interface and Local IP:** Open Command Prompt or PowerShell and run `ipconfig /all`. Look for your active network adapter (e.g., "Ethernet adapter Ethernet", "Wi-Fi adapter Wi-Fi"). Note the "IPv4 Address".
 2.  **Find Interface Name:** Run `netsh interface show interface` to list interface names. Use the "Interface Name" column value (e.g., "Ethernet", "Wi-Fi").
 3.  **Find Gateway MAC:**
-    -   First, find your gateway's IP: `ipconfig /all` (look for "Default Gateway")
-    -   Then, find its MAC address with `arp -a <gateway_ip>` (e.g., `arp -a 192.168.1.1`)
+    - First, find your gateway's IP: `ipconfig /all` (look for "Default Gateway")
+    - Then, find its MAC address with `arp -a <gateway_ip>` (e.g., `arp -a 192.168.1.1`)
 
 #### Client Configuration - SOCKS5 Proxy Mode
 
@@ -106,28 +106,28 @@ role: "client"
 
 # Logging configuration
 log:
-    level: "info" # none, debug, info, warn, error, fatal
+  level: "info" # none, debug, info, warn, error, fatal
 
 # SOCKS5 proxy configuration (client mode)
 socks5:
-    - listen: "127.0.0.1:1080" # SOCKS5 proxy listen address
+  - listen: "127.0.0.1:1080" # SOCKS5 proxy listen address
 
 # Network interface settings
 network:
-    interface: "en0" # CHANGE ME: Network interface (en0, eth0, wlan0, etc.)
-    local_addr: "192.168.1.100:0" # CHANGE ME: Local IP (use port 0 for random port)
-    router_mac: "aa:bb:cc:dd:ee:ff" # CHANGE ME: Gateway/router MAC address
+  interface: "en0" # CHANGE ME: Network interface (en0, eth0, wlan0, etc.)
+  local_addr: "192.168.1.100:0" # CHANGE ME: Local IP (use port 0 for random port)
+  router_mac: "aa:bb:cc:dd:ee:ff" # CHANGE ME: Gateway/router MAC address
 
 # Server connection settings
 server:
-    addr: "SERVER_IP:9999" # CHANGE ME: paqet server address and port
+  addr: "SERVER_IP:9999" # CHANGE ME: paqet server address and port
 
 # Transport protocol configuration
 transport:
-    protocol: "kcp" # Transport protocol (currently only "kcp" supported)
-    kcp:
-        block: "aes" # Encryption algorithm
-        key: "your-secret-key-here" # CHANGE ME: Secret key (must match server)
+  protocol: "kcp" # Transport protocol (currently only "kcp" supported)
+  kcp:
+    block: "aes" # Encryption algorithm
+    key: "your-secret-key-here" # CHANGE ME: Secret key (must match server)
 ```
 
 #### Example Server Configuration (`config.yaml`)
@@ -138,24 +138,24 @@ role: "server"
 
 # Logging configuration
 log:
-    level: "info" # none, debug, info, warn, error, fatal
+  level: "info" # none, debug, info, warn, error, fatal
 
 # Server listen configuration
 listen:
-    addr: ":9999" # CHANGE ME: Server listen port (must match network.local_addr port)
+  addr: ":9999" # CHANGE ME: Server listen port (must match network.local_addr port)
 
 # Network interface settings
 network:
-    interface: "eth0" # CHANGE ME: Network interface (eth0, ens3, en0, etc.)
-    local_addr: "10.0.0.100:9999" # CHANGE ME: Server IP and port (port must match listen.addr)
-    router_mac: "aa:bb:cc:dd:ee:ff" # CHANGE ME: Gateway/router MAC address
+  interface: "eth0" # CHANGE ME: Network interface (eth0, ens3, en0, etc.)
+  local_addr: "10.0.0.100:9999" # CHANGE ME: Server IP and port (port must match listen.addr)
+  router_mac: "aa:bb:cc:dd:ee:ff" # CHANGE ME: Gateway/router MAC address
 
 # Transport protocol configuration
 transport:
-    protocol: "kcp" # Transport protocol (currently only "kcp" supported)
-    kcp:
-        block: "aes" # Encryption algorithm
-        key: "your-secret-key-here" # CHANGE ME: Secret key (must match client)
+  protocol: "kcp" # Transport protocol (currently only "kcp" supported)
+  kcp:
+    block: "aes" # Encryption algorithm
+    key: "your-secret-key-here" # CHANGE ME: Secret key (must match client)
 ```
 
 #### Critical Firewall Configuration
@@ -244,8 +244,8 @@ paqet uses a unified YAML configuration that works for both clients and servers.
 
 **📁 For complete parameter documentation, see the example files:**
 
--   [`example/client.yaml.example`](example/client.yaml.example) - Client configuration reference
--   [`example/server.yaml.example`](example/server.yaml.example) - Server configuration reference
+- [`example/client.yaml.example`](example/client.yaml.example) - Client configuration reference
+- [`example/server.yaml.example`](example/server.yaml.example) - Server configuration reference
 
 ### Critical Configuration Points
 
@@ -309,22 +309,22 @@ Security depends entirely on proper key management. Use the `secret` command to 
 
 1.  **Permission Denied:** Ensure you are running with `sudo`.
 2.  **Connection Times Out:**
-    -   **Transport Configuration Mismatch:**
-        -   **KCP**: Ensure `transport.kcp.key` is exactly identical on client and server
-    -   **`iptables` Rules:** Did you apply the firewall rules on the server?
-    -   **Incorrect Network Details:** Double-check all IPs, MAC addresses, and interface names.
-    -   **Cloud Provider Firewalls:** Ensure your cloud provider's security group allows TCP traffic on your `listen.addr` port.
-    -   **NAT/Port Configuration:** For servers, ensure `listen.addr` and `network.local_addr` ports match. For clients, use port `0` in `network.local_addr` for automatic port assignment to avoid conflicts.
+    - **Transport Configuration Mismatch:**
+      - **KCP**: Ensure `transport.kcp.key` is exactly identical on client and server
+    - **`iptables` Rules:** Did you apply the firewall rules on the server?
+    - **Incorrect Network Details:** Double-check all IPs, MAC addresses, and interface names.
+    - **Cloud Provider Firewalls:** Ensure your cloud provider's security group allows TCP traffic on your `listen.addr` port.
+    - **NAT/Port Configuration:** For servers, ensure `listen.addr` and `network.local_addr` ports match. For clients, use port `0` in `network.local_addr` for automatic port assignment to avoid conflicts.
 3.  **Use `ping` and `dump`:** Use `paqet ping -c config.yaml` to test the connection. Use `paqet dump -p <PORT>` on the server to see if packets are arriving.
 
 ## Acknowledgments
 
 This work draws inspiration from the research and implementation in the [gfw_resist_tcp_proxy](https://github.com/GFW-knocker/gfw_resist_tcp_proxy) project by GFW-knocker, which explored the use of raw sockets to circumvent certain forms of network filtering. This project serves as a Go-based exploration of those concepts.
 
--   Uses [pcap](https://github.com/google/gopacket/pcap) for low-level packet capture and injection
--   Uses [gopacket](https://github.com/google/gopacket) for raw packet crafting and decoding
--   Uses [kcp-go](https://github.com/xtaci/kcp-go) for reliable transport with encryption
--   Uses [smux](https://github.com/xtaci/smux) for connection multiplexing
+- Uses [pcap](https://github.com/gopacket/gopacket/pcap) for low-level packet capture and injection
+- Uses [gopacket](https://github.com/gopacket/gopacket) for raw packet crafting and decoding
+- Uses [kcp-go](https://github.com/xtaci/kcp-go) for reliable transport with encryption
+- Uses [smux](https://github.com/xtaci/smux) for connection multiplexing
 
 ## License
 
