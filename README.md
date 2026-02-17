@@ -31,9 +31,7 @@
 
 ### 1. Download a Release
 
-Download the pre-compiled binary for your client and server operating systems from the project's **Releases page**.
-
-You will also need the configuration files from the `example/` directory.
+Download the pre-compiled binary for your client and server operating systems from the [Releases page](https://github.com/hanselime/paqet/releases/latest).
 
 ### 2. Configure the Connection
 
